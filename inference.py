@@ -29,7 +29,7 @@ def predict(args):
         window=args.window
     )
     test_data_loader = DataLoader(test_dataset, batch_size=args.batch_size, num_workers=args.num_workers, drop_last=False, shuffle=False, pin_memory=True, collate_fn=test_dataset.collater)
-    
+    print("===== Video features data loaded! =====")
     predict_model = matchvoice_model(llm_ckpt=args.tokenizer_name,tokenizer_ckpt=args.tokenizer_name,num_video_query_token=args.num_video_query_token, num_features=args.num_features, device=args.device, inference=True)
 
     # Load checkpoints
@@ -41,6 +41,7 @@ def predict(args):
     predict_model.load_state_dict(new_model_state_dict)
 
     predict_model.eval()
+    print("===== Model and Checkpoints loaded! =====")
     headers = ['league', 'game', 'half', 'timestamp', 'type', 'anonymized']
     headers += [f'predicted_res_{i}' for i in range(args.generate_num)]
     with open(args.csv_output_path, 'w', newline='') as file:
@@ -64,7 +65,7 @@ def predict(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Train a model with FRANZ dataset.")
-    parser.add_argument("--feature_root", type=str, default="./features/features_baidu_soccer_embeddings")
+    parser.add_argument("--feature_root", type=str, default="./features/baidu_soccer_embeddings")
     parser.add_argument("--ann_root", type=str, default="./dataset/SN-Caption-test-align")
     parser.add_argument("--model_ckpt", type=str, default="./ckpt/models_ckpt/baidu/model_save_best_CIDEr.pth")
     parser.add_argument("--window", type=float, default=15)

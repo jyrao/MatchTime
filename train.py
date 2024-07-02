@@ -30,12 +30,13 @@ def train(args):
 
     train_data_loader = DataLoader(train_dataset, batch_size=args.train_batch_size, num_workers=args.train_num_workers, drop_last=False, shuffle=True, pin_memory=True, collate_fn=train_dataset.collater)
     val_data_loader = DataLoader(val_dataset, batch_size=args.val_batch_size, num_workers=args.val_num_workers, drop_last=True, shuffle=True, pin_memory=True, collate_fn=train_dataset.collater)
-    
+    print("===== Video features data loaded! =====")
     model = matchvoice_model(llm_ckpt=args.tokenizer_name, tokenizer_ckpt=args.tokenizer_name ,window=args.window, num_query_tokens=args.num_query_tokens, num_video_query_token=args.num_video_query_token, num_features=args.num_features, device=args.device).to(args.device)
     if args.continue_train:
         model.load_state_dict(torch.load(args.load_ckpt))
     optimizer = AdamW(model.parameters(), lr=args.lr)
     os.makedirs(args.model_output_dir, exist_ok=True)
+    print("===== Model and Checkpoints loaded! =====")
     
     max_val_CIDEr = max(float(0), args.pre_max_CIDEr)
     for epoch in range(args.pre_epoch, args.num_epoch):
@@ -97,7 +98,7 @@ if __name__ == "__main__":
         torch.cuda.manual_seed_all(42)
 
     parser = argparse.ArgumentParser(description="Train a model with FRANZ dataset.")
-    parser.add_argument("--feature_root", type=str, default="./features/features_baidu_soccer_embeddings")
+    parser.add_argument("--feature_root", type=str, default="./features/baidu_soccer_embeddings")
     parser.add_argument("--window", type=float, default=15)
     parser.add_argument("--tokenizer_name", type=str, default="meta-llama/Meta-Llama-3-8B")
     

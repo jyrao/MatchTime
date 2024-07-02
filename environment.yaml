@@ -1,0 +1,16 @@
+name: matchtime
+channels:
+  - defaults
+  - pip:
+      - argparse==1.4.0
+      - clip==1.0
+      - einops==0.8.0
+      - numpy==1.24.4
+      - opencv-python==4.10.0.84
+      - packaging==24.1
+      - pillow==10.4.0
+      - pycocoevalcap==1.2
+      - torch==2.3.1+cu118
+      - torchvision==0.15.0+cu118
+      - tqdm==4.66.4
+      - transformers==4.42.3

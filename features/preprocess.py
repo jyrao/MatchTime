@@ -1,5 +1,6 @@
 import os
 import shutil
+import argparse
 
 def rename_and_relocate_grandchild_folders(main_dir):
     for subdir, dirs, files in os.walk(main_dir):
@@ -14,11 +15,9 @@ def rename_and_relocate_grandchild_folders(main_dir):
                     while os.path.exists(new_full_path):
                         new_full_path = os.path.join(main_dir, f"{new_name}_{counter}")
                         counter += 1
-                    # 移动孙文件夹
                     shutil.move(grandchild_full_path, new_full_path)
                     print(f"Moved {grandchild_full_path} to {new_full_path}")
 
-        # 此时子文件夹应该是空的，尝试删除
         for dir in dirs:
             try:
                 os.rmdir(os.path.join(subdir, dir))
@@ -26,5 +25,9 @@ def rename_and_relocate_grandchild_folders(main_dir):
             except OSError as e:
                 print(f"Error: {e.strerror} - {os.path.join(subdir, dir)}")
 
-main_dir = './features/features_baidu_soccer_embeddings'
-rename_and_relocate_grandchild_folders(main_dir)
+if __name__ == "__main__":
+    # Default could be './features/baidu_soccer_embeddings'
+    parser = argparse.ArgumentParser(description="Rename and relocate grandchild folders.")
+    parser.add_argument('--main_dir', type=str, required=True, help='The main directory containing the folders to be processed.')
+    args = parser.parse_args()
+    rename_and_relocate_grandchild_folders(args.main_dir)
