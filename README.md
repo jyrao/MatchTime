@@ -2,11 +2,11 @@
 This repository contains the official PyTorch implementation of MatchTime: https://arxiv.org/abs/2406.18530/
 
 <div align="center">
-   <img src="./teaser.png">
+   <img src="./assets/teaser.png">
 </div>
 
 <div align="center">
-   <img src="./commentary.png">
+   <img src="./assets/commentary.png">
 </div>
 
 ## Some Information
@@ -15,6 +15,8 @@ This repository contains the official PyTorch implementation of MatchTime: https
 ## Requirements
 - Python >= 3.8 (Recommend to use [Anaconda](https://www.anaconda.com/download/#linux) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html))
 - [PyTorch >= 2.0.0](https://pytorch.org/) (If use A100)
+- transformers >= 4.42.3
+- pycocoevalcap >= 1.2
 
 A suitable [conda](https://conda.io/) environment named `matchtime` can be created and activated with:
 ```
@@ -24,7 +26,6 @@ conda activate matchtime
 ```
 
 ## Training
-
 Before training, make sure you have prepared [features](https://pypi.org/project/SoccerNet/) and caption [data]((https://drive.google.com/drive/folders/14tb6lV2nlTxn3VygwAPdmtKm7v0Ss8wG)), and put them into according folders. The structure after collating should be like:
 ``````
 └─ MatchTime
@@ -82,20 +83,21 @@ python inference_single_video_CLIP.py single_video_path
 Here we only provide the version of CLIP feature (using VIT/B-32), for crop the CLIP feature, please check [here](https://github.com/openai/CLIP).
 
 ## TODO
+- [x] Commentary Model & Training & Inference Code
+- [x] Release Checkpoints
+- [x] Release Meta Data
+- [ ] Alignment Model & Training & Inference Code
+- [ ] Evaluation Code
 - [ ] Release Demo
-- [ ] Model & Training & Inference Code
-- [ ] Dataset Processing Pipeline
-- [ ] Meta Data
-- [ ] Release Checkpoints
 
 ## Citation
 If you use this code for your research or project, please cite:
 
 	@arxiv{rao2024matchtimeautomaticsoccergame,
-      title={MatchTime: Towards Automatic Soccer Game Commentary Generation}, 
-      author={Jiayuan Rao and Haoning Wu and Chang Liu and Yanfeng Wang and Weidi Xie},
-      year={2024},
-      journal={arXiv preprint arXiv:2406.18530},
+         title={MatchTime: Towards Automatic Soccer Game Commentary Generation}, 
+         author={Jiayuan Rao and Haoning Wu and Chang Liu and Yanfeng Wang and Weidi Xie},
+         year={2024},
+         journal={arXiv preprint arXiv:2406.18530},
       }
 
 ## Acknowledgements
