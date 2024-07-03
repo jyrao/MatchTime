@@ -2,11 +2,11 @@
 This repository contains the official PyTorch implementation of MatchTime: https://arxiv.org/abs/2406.18530/
 
 <div align="center">
-   <img src="./assets/teaser.png">
+   <img src="https://raw.githubusercontent.com/jyrao/MatchTime/main/teaser.png">
 </div>
 
 <div align="center">
-   <img src="./assets/commentary.png">
+   <img src="https://raw.githubusercontent.com/jyrao/MatchTime/main/commentary.png">
 </div>
 
 ## Some Information
