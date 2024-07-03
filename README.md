@@ -2,11 +2,11 @@
 This repository contains the official PyTorch implementation of MatchTime: https://arxiv.org/abs/2406.18530/
 
 <div align="center">
-   <img src="./teaser.png">
+   <img src="./assets/teaser.png">
 </div>
 
 <div align="center">
-   <img src="./commentary.png">
+   <img src="./assets/commentary.png">
 </div>
 
 ## Some Information
@@ -15,6 +15,8 @@ This repository contains the official PyTorch implementation of MatchTime: https
 ## Requirements
 - Python >= 3.8 (Recommend to use [Anaconda](https://www.anaconda.com/download/#linux) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html))
 - [PyTorch >= 2.0.0](https://pytorch.org/) (If use A100)
+- transformers >= 4.42.3
+- pycocoevalcap >= 1.2
 
 A suitable [conda](https://conda.io/) environment named `matchtime` can be created and activated with:
 ```
@@ -24,7 +26,6 @@ conda activate matchtime
 ```
 
 ## Training
-
 Before training, make sure you have prepared [features](https://pypi.org/project/SoccerNet/) and caption [data]((https://drive.google.com/drive/folders/14tb6lV2nlTxn3VygwAPdmtKm7v0Ss8wG)), and put them into according folders. The structure after collating should be like:
 ``````
 └─ MatchTime
@@ -79,23 +80,81 @@ We also provide a version for predict the commentary single video (for our check
 ```
 python inference_single_video_CLIP.py single_video_path
 ```
-Here we only provide the version of CLIP feature (using VIT/B-32), for crop the CLIP feature, please check [here](https://github.com/openai/CLIP).
+Here we only provide the version of CLIP feature (using VIT/B-32), for crop the CLIP feature, please check [here](https://github.com/openai/CLIP). CLIP features are not the one with best performance but are the most friendly for new new videos.
+
+## Alignment
+
+Before doing alignment, you should download videos from [here](https://www.soccer-net.org/data) (224p is enough) and make it in the following format:
+
+``````
+└─ MatchTime
+    ├─ videos_224p
+   ...    ├─ england_epl_2014-2015
+         ...   ├─ 2015-02-21 - 18-00 Chelsea 1 - 1 Burnley
+              ...     ├─ 1_224.mkv
+                      └─ 2_224p.mkv
+``````
+
+### Pre-process (Coarse Align)
+
+We need to use [WhisperX](https://github.com/m-bain/whisperX) and [LLaMA3](https://huggingface.co/docs/transformers/model_doc/llama3)(as agent) to finish coarse alignment with following steps:
+
+*WhisperX ASR:*
+```
+python ./alignment/soccer_whisperx.py --process_directory video_folder(eg. ./videos_224p/england_epl_2014-2015) --output_directory output_folder(eg. ./ASR_results/england_epl_2014-2015)
+``` 
+*Transform to Events:*
+```
+python ./alignment/soccer_asr2events.py --base_path ASR_results_folder(eg. ./ASR_results/england_epl_2014-2015) --output_dir envent_results_folder(eg. ./event_results/england_epl_2014-2015)
+```
+
+*Align from Events:*
+```
+python ./alignment/soccer_align_from_event.py --event_path envent_results_folder(eg. ./event_results/england_epl_2014-2015) --output_dir output_directory(eg. ./pre-processed/england_epl_2014-2015)
+```
+
+More details could be checked in paper.
+
+### Contrastive Learning (Fine-grained Align)
+
+After downloading checkpoints from [here](https://huggingface.co/Homie0609/MatchTime/tree/main). Use the following code to finish alignment with contrastive learning:
+```
+python ./alignment/do_alignment.py
+```
+By changing the hyper-parameter ***finding_words***, you can freely align from ASR, enent, or original SN-Caption.
+
+Also, you can directly use alignment model by
+```
+from alignment.matchtime_model import ContrastiveLearningModel
+```
+
+## Evaluation
+We provide codes for evaluate the prediction results:
+```
+# for single csv file
+python ./evaluation/scoer_single.py --csv_path ./inference_result/sample.csv
+# for many csv files to record scores in a new csv file
+python ./evaluation/scoer_group.py
+# for gpt score (need OpenAI API Key)
+python ./evaluation/scoer_gpt.py ./inference_result/sample.csv
+```
 
 ## TODO
+- [x] Commentary Model & Training & Inference Code
+- [x] Release Checkpoints
+- [x] Release Meta Data
+- [x] Alignment Model & Training & Inference Code
+- [x] Evaluation Code
 - [ ] Release Demo
-- [ ] Model & Training & Inference Code
-- [ ] Dataset Processing Pipeline
-- [ ] Meta Data
-- [ ] Release Checkpoints
 
 ## Citation
 If you use this code for your research or project, please cite:
 
 	@arxiv{rao2024matchtimeautomaticsoccergame,
-      title={MatchTime: Towards Automatic Soccer Game Commentary Generation}, 
-      author={Jiayuan Rao and Haoning Wu and Chang Liu and Yanfeng Wang and Weidi Xie},
-      year={2024},
-      journal={arXiv preprint arXiv:2406.18530},
+         title={MatchTime: Towards Automatic Soccer Game Commentary Generation}, 
+         author={Jiayuan Rao and Haoning Wu and Chang Liu and Yanfeng Wang and Weidi Xie},
+         year={2024},
+         journal={arXiv preprint arXiv:2406.18530},
       }
 
 ## Acknowledgements
