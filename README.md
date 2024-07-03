@@ -1,15 +1,13 @@
 # MatchTime: Towards Automatic Soccer Game Commentary Generation
 This repository contains the official PyTorch implementation of MatchTime: https://arxiv.org/abs/2406.18530/
 
-<div>
-   <img src="https://raw.githubusercontent.com/jyrao/MatchTime/main/teaser.png">
+<div align="center">
+   <img src="./assets/teaser.png">
 </div>
 
 <div align="center">
-   <img src="https://raw.githubusercontent.com/jyrao/MatchTime/main/commentary.png">
+   <img src="./assets/commentary.png">
 </div>
-
-
 
 ## Some Information
 [Project Page](https://haoningwu3639.github.io/MatchTime/)  $\cdot$ [Paper](https://arxiv.org/abs/2406.18530/) $\cdot$ [Dataset](https://drive.google.com/drive/folders/14tb6lV2nlTxn3VygwAPdmtKm7v0Ss8wG) $\cdot$ [Checkpoint](https://huggingface.co/Homie0609/MatchVoice)
