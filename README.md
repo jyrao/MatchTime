@@ -2,15 +2,15 @@
 This repository contains the official PyTorch implementation of MatchTime: https://arxiv.org/abs/2406.18530/
 
 <div align="center">
-   <img src="https://raw.githubusercontent.com/jyrao/MatchTime/main/teaser.png">
+   <img src="./assets/teaser.png">
 </div>
 
 <div align="center">
-   <img src="https://raw.githubusercontent.com/jyrao/MatchTime/main/commentary.png">
+   <img src="./assets/commentary.png">
 </div>
 
 ## Some Information
-[Project Page](https://haoningwu3639.github.io/MatchTime/)  $\cdot$ [Paper](https://arxiv.org/abs/2406.18530/) $\cdot$ [Dataset](https://drive.google.com/drive/folders/14tb6lV2nlTxn3VygwAPdmtKm7v0Ss8wG) $\cdot$ [Checkpoint](https://huggingface.co/Homie0609/MatchVoice)
+[Project Page](https://haoningwu3639.github.io/MatchTime/)  $\cdot$ [Paper](https://arxiv.org/abs/2406.18530/) $\cdot$ [Dataset](https://drive.google.com/drive/folders/14tb6lV2nlTxn3VygwAPdmtKm7v0Ss8wG) $\cdot$ [Checkpoint](https://huggingface.co/Homie0609/MatchVoice) $\cdot$ [Demo Video](https://www.bilibili.com/video/BV1L4421U76m)
 
 ## Requirements
 - Python >= 3.8 (Recommend to use [Anaconda](https://www.anaconda.com/download/#linux) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html))
@@ -56,6 +56,8 @@ with the format of features is adjusted by
 ```
 python ./features/preprocess.py directory_path_of_feature
 ```
+Above example gives the format of Baidu feature, in our experiments we also used ResNET_PCA_512, C3D_PCA_512 from official website. If you want to use [CLIP](https://github.com/openai/CLIP)(2 FPS) or [InternVideo](https://github.com/OpenGVLab/InternVideo/tree/main/InternVideo1)(1FPS) feature. You can follow their official website to extract feature or contact us for features.
+
 After preparing the data and features, you can pre-train (or finetune) with the following terminal command (Check hyper-parameters at the bottom of *train.py*):
 ```
 python train.py
@@ -97,7 +99,7 @@ Before doing alignment, you should download videos from [here](https://www.socce
 
 ### Pre-process (Coarse Align)
 
-We need to use [WhisperX](https://github.com/m-bain/whisperX) and [LLaMA3](https://huggingface.co/docs/transformers/model_doc/llama3)(as agent) to finish coarse alignment with following steps:
+We need to use [WhisperX](https://github.com/m-bain/whisperX) and [LLaMA3](https://huggingface.co/docs/transformers/model_doc/llama3) (as agent) to finish coarse alignment with following steps:
 
 *WhisperX ASR:*
 ```
@@ -145,7 +147,7 @@ python ./evaluation/scoer_gpt.py ./inference_result/sample.csv
 - [x] Release Meta Data
 - [x] Alignment Model & Training & Inference Code
 - [x] Evaluation Code
-- [ ] Release Demo
+- [x] Release Demo
 
 ## Citation
 If you use this code for your research or project, please cite:
