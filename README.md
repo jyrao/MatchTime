@@ -10,7 +10,7 @@ This repository contains the official PyTorch implementation of MatchTime: https
 </div>
 
 ## Some Information
-[Project Page](https://haoningwu3639.github.io/MatchTime/)  $\cdot$ [Paper](https://arxiv.org/abs/2406.18530/) $\cdot$ [Dataset](https://drive.google.com/drive/folders/14tb6lV2nlTxn3VygwAPdmtKm7v0Ss8wG) $\cdot$ [Checkpoint](https://huggingface.co/Homie0609/MatchVoice) $\cdot$ [Demo Video](https://www.bilibili.com/video/BV1L4421U76m)
+[Project Page](https://haoningwu3639.github.io/MatchTime/)  $\cdot$ [Paper](https://arxiv.org/abs/2406.18530/) $\cdot$ [Dataset](https://drive.google.com/drive/folders/14tb6lV2nlTxn3VygwAPdmtKm7v0Ss8wG) $\cdot$ [Checkpoint](https://huggingface.co/Homie0609/MatchVoice) $\cdot$ [Demo Video (YouTube)](https://www.youtube.com/watch?v=E3RxHR-M6y0) $\cdot$ [Demo Video (bilibili)](https://www.bilibili.com/video/BV1L4421U76m)
 
 ## Requirements
 - Python >= 3.8 (Recommend to use [Anaconda](https://www.anaconda.com/download/#linux) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html))
