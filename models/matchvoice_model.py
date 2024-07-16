@@ -90,9 +90,8 @@ class matchvoice_model(nn.Module):
         self.ln_vision = self.ln_vision.eval()
         self.video_frame_position_embedding = self.video_frame_position_embedding.to(self.device)
 
-        # 指定pickle文件路径
+        # Here is a trick for inference that generates soccer relevant, you can delete this LogitsProcessorList part (including in generation function)
         file_path = './soccer_words_llama3.pkl'
-        # 使用pickle读取文件内容
         with open(file_path, 'rb') as file:
             self.token_ids_list = pkl.load(file)
         self.token_ids_list.append(128000)
@@ -119,10 +118,7 @@ class matchvoice_model(nn.Module):
 
     
     def maybe_autocast(self, dtype=torch.float16):
-        # if on cpu, don't use autocast
-        # if on gpu, use autocast with dtype if provided, otherwise use torch.float16
         enable_autocast = self.device != torch.device("cpu")
-
         if enable_autocast:
             return torch.cuda.amp.autocast(dtype=dtype)
         else:
@@ -141,22 +137,18 @@ class matchvoice_model(nn.Module):
         except:
             batch_size, time_length, _, _ = video_features.size()
 
-        # q_hidden_state = video_features过一个Qformer
         if len(video_features.size()) != 4:
             video_features = video_features.unsqueeze(-2)
         video_features = self.ln_vision(video_features)
         video_features = einops.rearrange(video_features, 'b t n f -> (b t) n f', b=batch_size, t=time_length)
 
-        # frame_hidden_state = Q_video_features 加positional
         position_ids = torch.arange(time_length, dtype=torch.long, device=video_features.device)
         position_ids = position_ids.unsqueeze(0).expand(batch_size, -1)
         frame_position_embeddings = self.video_frame_position_embedding(position_ids)
         frame_position_embeddings = frame_position_embeddings.unsqueeze(-2)
-        # print(q_hidden_state.size())
         frame_hidden_state = einops.rearrange(video_features, '(b t) n f -> b t n f',b=batch_size,t=time_length)
         frame_hidden_state = frame_position_embeddings + frame_hidden_state
 
-        # video_hidden = frame_hidden_state 过video Qformer
         frame_hidden_state =  einops.rearrange(frame_hidden_state, 'b t q h -> b (t q) h',b=batch_size,t=time_length)
         frame_atts = torch.ones(frame_hidden_state.size()[:-1], dtype=torch.long).to(frame_hidden_state)
         video_query_tokens = self.video_query_tokens.expand(frame_hidden_state.shape[0], -1, -1).to(frame_hidden_state.device)
@@ -169,18 +161,15 @@ class matchvoice_model(nn.Module):
         )
         video_hidden = video_query_output.last_hidden_state
 
-        # prefix_embeddings = video_hidden 过projection/transformer
         inputs_llama = self.llama_proj(video_hidden)
         if self.inference:
             return self.generate_text(inputs_llama)
 
-        # Generate and output
         if validating:
             temp_res_text = self.generate_text(inputs_llama)
             anonymized = [sublist[3] for sublist in samples["caption_info"]]
             return temp_res_text, anonymized
         
-        # Concat操作
         visual_label = torch.full((batch_size, self.num_video_query_token), -100, dtype=targets.dtype)
         concat_targets = torch.cat((visual_label, targets), dim=1).to(self.device)
         temp_input_ids = inputs_ids.clone().to(self.device)
@@ -190,7 +179,6 @@ class matchvoice_model(nn.Module):
         mask = torch.concat((mask_prefix, atts_llama), dim=1).to(self.device)
     
         original_stdout = sys.stdout
-        # 创建一个新的io流来捕获输出
         sys.stdout = io.StringIO()
         with self.maybe_autocast():
             outputs = self.llama_model(
@@ -206,7 +194,6 @@ class matchvoice_model(nn.Module):
     def generate_text(self, inputs_llama):
         start_embeds = self.llama_model.model.embed_tokens(torch.tensor([128000]).to(self.device))
         inputs_llama_with_s = torch.cat([inputs_llama, start_embeds.expand(inputs_llama.size(0), -1, -1)], dim=1).to(dtype=torch.bfloat16)
-        # print("aaa", inputs_llama_with_s.dtype, self.llama_model.dtype)
         temp_res_tokens = self.llama_model.generate(
             logits_processor=self.logits_prosessors,
             renormalize_logits=True,
@@ -224,8 +211,6 @@ class matchvoice_model(nn.Module):
         return res_text
 
 class LayerNorm(nn.LayerNorm):
-    """Subclass torch's LayerNorm to handle fp16."""
-
     def forward(self, x: torch.Tensor):
         orig_type = x.dtype
         ret = super().forward(x.type(torch.float32))
