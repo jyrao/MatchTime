@@ -64,7 +64,7 @@ def calculate_metrics(csv_file_path):
 
     # Calculate ROUGE scores, focusing on ROUGE-L
     _, rouge_scores = rouge_scorer.compute_score(references, hypotheses)
-    rouge_l_score = rouge_scores[2]
+    rouge_l_score = rouge_scores.mean()
 
     # Calculate CIDER scores
     cider_score, _ = cider_scorer.compute_score(references, hypotheses)
