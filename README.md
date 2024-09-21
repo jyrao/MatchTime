@@ -1,4 +1,4 @@
-# MatchTime: Towards Automatic Soccer Game Commentary Generation
+# MatchTime: Towards Automatic Soccer Game Commentary Generation (EMNLP 2024)
 This repository contains the official PyTorch implementation of MatchTime: https://arxiv.org/abs/2406.18530/
 
 <div align="center">
