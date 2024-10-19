@@ -152,11 +152,11 @@ python ./evaluation/scoer_gpt.py ./inference_result/sample.csv
 ## Citation
 If you use this code for your research or project, please cite:
 
-	@arxiv{rao2024matchtimeautomaticsoccergame,
-         title={MatchTime: Towards Automatic Soccer Game Commentary Generation}, 
-         author={Jiayuan Rao and Haoning Wu and Chang Liu and Yanfeng Wang and Weidi Xie},
-         year={2024},
-         journal={arXiv preprint arXiv:2406.18530},
+      @inproceedings{rao2024matchtimeautomaticsoccergame,
+         title     = {MatchTime: Towards Automatic Soccer Game Commentary Generation},
+         author    = {Rao, Jiayuan and Wu, Haoning and Liu, Chang and Wang, Yanfeng and Xie, Weidi},
+         booktitle = {Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing},
+         year      = {2024}
       }
 
 ## Acknowledgements
