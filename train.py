@@ -100,7 +100,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Train a model with FRANZ dataset.")
     parser.add_argument("--feature_root", type=str, default="./features/baidu_soccer_embeddings")
     parser.add_argument("--window", type=float, default=15)
-    parser.add_argument("--tokenizer_name", type=str, default="meta-llama/Meta-Llama-3-8B")
+    parser.add_argument("--tokenizer_name", type=str, default="meta-llama/Meta-Llama-3-8B-Instruct")
     
     parser.add_argument("--train_ann_root", type=str, default="./dataset/MatchTime/train")
     parser.add_argument("--train_batch_size", type=int, default=32)
