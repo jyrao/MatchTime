@@ -69,7 +69,7 @@ if __name__ == "__main__":
     parser.add_argument("--ann_root", type=str, default="./dataset/SN-Caption-test-align")
     parser.add_argument("--model_ckpt", type=str, default="./ckpt/models_ckpt/baidu/model_save_best_CIDEr.pth")
     parser.add_argument("--window", type=float, default=15)
-    parser.add_argument("--tokenizer_name", type=str, default="meta-llama/Meta-Llama-3-8B", help="LLM checkpoints, use path in your computer is fine as well")
+    parser.add_argument("--tokenizer_name", type=str, default="meta-llama/Meta-Llama-3-8B-Instruct", help="LLM checkpoints, use path in your computer is fine as well")
     parser.add_argument("--batch_size", type=int, default=60)
     parser.add_argument("--num_workers", type=int, default=32)
     parser.add_argument("--num_query_tokens", type=int, default=32)
